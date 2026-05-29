@@ -1,10 +1,15 @@
 
 /* =========================
    BJVE SCRIPT ENGINE (.bjve)
+   - parser + runtime
+   - supports core commands
 ========================= */
 
 BJVE.script = (function () {
 
+  /* =========================
+     RUN SINGLE LINE
+  ========================= */
   function runLine(line) {
     const parts = line.trim().split(" ");
     const cmd = parts[0];
@@ -12,28 +17,32 @@ BJVE.script = (function () {
 
     switch (cmd) {
 
-      // set variable
+      /* =========================
+         STATE SYSTEM
+      ========================= */
       case "set":
         BJVE.state.set(args[0], Number(args[1]));
         break;
 
-      // add value
       case "add":
-        let v = BJVE.state.get(args[0]) || 0;
-        BJVE.state.set(args[0], v + Number(args[1]));
+        let current = BJVE.state.get(args[0]) || 0;
+        BJVE.state.set(args[0], current + Number(args[1]));
         break;
 
-      // print value
       case "print":
         console.log("[BJVE]", BJVE.state.get(args[0]));
         break;
 
-      // run module
+      /* =========================
+         MODULE SYSTEM
+      ========================= */
       case "run":
         BJVE.modules.use(args[0]);
         break;
 
-      // open UI window
+      /* =========================
+         UI SYSTEM (OpenDraw)
+      ========================= */
       case "ui":
         BJVE.ui.open(`<h1>${args.join(" ")}</h1>`, {
           title: "BJVE UI",
@@ -42,23 +51,44 @@ BJVE.script = (function () {
         });
         break;
 
+      /* =========================
+         INTERNET SYSTEM
+      ========================= */
+      case "internet":
+        BJVE.internet.white = args[0] === "true";
+        console.log("[BJVE] White Internet =", BJVE.internet.white);
+        break;
+
+      /* =========================
+         MODULE LOADER
+      ========================= */
+      case "load":
+        BJVE.loader.load(args[0], args[1]);
+        break;
+
       default:
         console.warn("[BJVE SCRIPT] Unknown command:", cmd);
     }
   }
 
-  return {
+  /* =========================
+     SCRIPT RUNNER
+  ========================= */
+  function run(scriptText) {
+    const lines = scriptText.split("\n");
 
-    run(scriptText) {
-      const lines = scriptText.split("\n");
-
-      for (let line of lines) {
-        if (line.trim() !== "") {
-          runLine(line);
-        }
+    for (let line of lines) {
+      if (line.trim() !== "") {
+        runLine(line);
       }
     }
+  }
 
+  /* =========================
+     PUBLIC API
+  ========================= */
+  return {
+    run
   };
 
 })();
