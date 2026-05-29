@@ -1,25 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>BJVE X</title>
+  <meta charset="UTF-8">
+  <title>BJVE X API</title>
 </head>
+
 <body>
 
+<!-- =========================
+     1. CORE ENGINE
+========================= -->
 <script src="./src/bjve.core.js"></script>
 <script src="./src/bjve.state.js"></script>
 <script src="./src/bjve.modules.js"></script>
 <script src="./src/bjve.events.js"></script>
 <script src="./src/bjve.ui.js"></script>
+
+<!-- =========================
+     2. ADVANCED SYSTEMS
+========================= -->
+<script src="./src/bjve.loader.js"></script>
 <script src="./src/bjve.script.js"></script>
 
+<!-- =========================
+     3. MODULES (LOCAL PLUGINS)
+========================= -->
 <script src="./modules/snake.js"></script>
 <script src="./modules/clicker.js"></script>
 
+<!-- =========================
+     4. BOOTSTRAP .BJVE INDEX SCRIPT
+========================= -->
 <script>
-  // run demo script
-  fetch("./scripts/demo.bjve")
-    .then(r => r.text())
-    .then(t => BJVE.script.run(t));
+/* =========================
+   LOAD ENTRY SCRIPT
+   (your "index.bjve")
+========================= */
+
+fetch("./scripts/index.bjve")
+  .then(res => {
+    if (!res.ok) throw new Error("index.bjve not found");
+    return res.text();
+  })
+  .then(code => {
+    console.log("[BJVE] Running index.bjve");
+    BJVE.script.run(code);
+  })
+  .catch(err => {
+    console.error("[BJVE] Boot failed:", err);
+  });
 </script>
 
 </body>
