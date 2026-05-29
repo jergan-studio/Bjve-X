@@ -3,83 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <title>BJVE X</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
+      overflow: hidden;
+    }
+
+    #bjve-error {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      color: #0f0;
+      text-align: center;
+      padding-top: 60px;
+    }
+
+    #bjve-error img {
+      margin-top: 20px;
+      width: 300px;
+      border: 2px solid #0f0;
+    }
+
+    #bjve-main {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
 
 <!-- =========================
-   🪟 OPEN DRAW FIX (CRITICAL)
-   MUST LOAD BEFORE BJVE UI
+   ❌ ERROR SCREEN (FALLBACK)
 ========================= -->
-<script>
-function OpenDraw(html, options = {}) {
-  const win = document.createElement("div");
+<div id="bjve-error">
+  <h1>❌ BJVE NOT LOADED</h1>
+  <p>The engine failed to start.</p>
 
-  win.style.position = "fixed";
-  win.style.top = "50%";
-  win.style.left = "50%";
-  win.style.transform = "translate(-50%, -50%)";
-  win.style.width = (options.width || 300) + "px";
-  win.style.height = (options.height || 200) + "px";
-  win.style.background = "#111";
-  win.style.color = "#0f0";
-  win.style.padding = "10px";
-  win.style.border = "1px solid #0f0";
-  win.style.zIndex = 9999;
-  win.style.overflow = "auto";
+  <img src="data:image/png;base64,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" />
 
-  win.innerHTML = `
-    <div style="font-size:12px; margin-bottom:5px;">
-      ${options.title || "BJVE Window"}
-    </div>
-    ${html}
-  `;
-
-  document.body.appendChild(win);
-
-  return win;
-}
-</script>
+  <p>Engine failed to initialize.</p>
+</div>
 
 <!-- =========================
-   ⚙️ BJVE CORE SYSTEM
+   🧠 MAIN BJVE APP
 ========================= -->
-<script src="./src/bjve.core.js"></script>
-<script src="./src/bjve.state.js"></script>
-<script src="./src/bjve.modules.js"></script>
-<script src="./src/bjve.events.js"></script>
-<script src="./src/bjve.ui.js"></script>
+<div id="bjve-main"></div>
 
 <!-- =========================
-   🌐 LOADER + SCRIPT ENGINE
-========================= -->
-<script src="./src/bjve.loader.js"></script>
-<script src="./src/bjve.script.js"></script>
-
-<!-- =========================
-   🎮 MODULES
-========================= -->
-<script src="./modules/snake.js"></script>
-<script src="./modules/clicker.js"></script>
-
-<!-- =========================
-   🚀 BOOT .BJVE ENTRY FILE
+   ⚙️ BJVE ENGINE LOAD
 ========================= -->
 <script>
 console.log("[BJVE] Boot starting...");
 
-fetch("./scripts/index.bjve")
-  .then(res => {
-    if (!res.ok) throw new Error("index.bjve not found");
-    return res.text();
-  })
-  .then(code => {
-    console.log("[BJVE] Running index.bjve");
-    BJVE.script.run(code);
-  })
-  .catch(err => {
-    console.error("[BJVE] Boot failed:", err);
-  });
+function startBJVE() {
+
+  fetch("./scripts/index.bjve")
+    .then(res => {
+      if (!res.ok) throw new Error("index.bjve not found");
+      return res.text();
+    })
+    .then(code => {
+      console.log("[BJVE] Running .bjve script");
+      BJVE.script.run(code);
+
+      document.getElementById("bjve-main").style.display = "block";
+    })
+    .catch(err => {
+      console.error("[BJVE] BOOT FAILED:", err);
+
+      document.getElementById("bjve-error").style.display = "block";
+    });
+}
+
+/* wait for BJVE */
+window.addEventListener("load", () => {
+  if (typeof BJVE === "undefined") {
+    document.getElementById("bjve-error").style.display = "block";
+  } else {
+    startBJVE();
+  }
+});
 </script>
 
 </body>
