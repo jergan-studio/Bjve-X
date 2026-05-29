@@ -1,0 +1,10 @@
+
+internet false
+
+set coins 10
+add coins 5
+print coins
+
+run snake
+
+ui Hello BJVE X
