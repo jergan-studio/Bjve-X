@@ -1,15 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>BJVE X API</title>
+  <title>BJVE X</title>
 </head>
 
 <body>
 
 <!-- =========================
-     1. CORE ENGINE
+   🪟 OPEN DRAW FIX (CRITICAL)
+   MUST LOAD BEFORE BJVE UI
+========================= -->
+<script>
+function OpenDraw(html, options = {}) {
+  const win = document.createElement("div");
+
+  win.style.position = "fixed";
+  win.style.top = "50%";
+  win.style.left = "50%";
+  win.style.transform = "translate(-50%, -50%)";
+  win.style.width = (options.width || 300) + "px";
+  win.style.height = (options.height || 200) + "px";
+  win.style.background = "#111";
+  win.style.color = "#0f0";
+  win.style.padding = "10px";
+  win.style.border = "1px solid #0f0";
+  win.style.zIndex = 9999;
+  win.style.overflow = "auto";
+
+  win.innerHTML = `
+    <div style="font-size:12px; margin-bottom:5px;">
+      ${options.title || "BJVE Window"}
+    </div>
+    ${html}
+  `;
+
+  document.body.appendChild(win);
+
+  return win;
+}
+</script>
+
+<!-- =========================
+   ⚙️ BJVE CORE SYSTEM
 ========================= -->
 <script src="./src/bjve.core.js"></script>
 <script src="./src/bjve.state.js"></script>
@@ -18,25 +51,22 @@
 <script src="./src/bjve.ui.js"></script>
 
 <!-- =========================
-     2. ADVANCED SYSTEMS
+   🌐 LOADER + SCRIPT ENGINE
 ========================= -->
 <script src="./src/bjve.loader.js"></script>
 <script src="./src/bjve.script.js"></script>
 
 <!-- =========================
-     3. MODULES (LOCAL PLUGINS)
+   🎮 MODULES
 ========================= -->
 <script src="./modules/snake.js"></script>
 <script src="./modules/clicker.js"></script>
 
 <!-- =========================
-     4. BOOTSTRAP .BJVE INDEX SCRIPT
+   🚀 BOOT .BJVE ENTRY FILE
 ========================= -->
 <script>
-/* =========================
-   LOAD ENTRY SCRIPT
-   (your "index.bjve")
-========================= */
+console.log("[BJVE] Boot starting...");
 
 fetch("./scripts/index.bjve")
   .then(res => {
