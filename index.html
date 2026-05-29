@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BJVE X API</title>
+  <title>BJVE X</title>
 </head>
 <body>
 
-  <script src="./src/bjve.core.js"></script>
-  <script src="./src/bjve.state.js"></script>
-  <script src="./src/bjve.modules.js"></script>
-  <script src="./src/bjve.events.js"></script>
-  <script src="./src/bjve.fire.js"></script>
+<script src="./src/bjve.core.js"></script>
+<script src="./src/bjve.state.js"></script>
+<script src="./src/bjve.modules.js"></script>
+<script src="./src/bjve.events.js"></script>
+<script src="./src/bjve.ui.js"></script>
+<script src="./src/bjve.script.js"></script>
 
-  <script src="./modules/snake.js"></script>
-  <script src="./modules/clicker.js"></script>
+<script src="./modules/snake.js"></script>
+<script src="./modules/clicker.js"></script>
+
+<script>
+  // run demo script
+  fetch("./scripts/demo.bjve")
+    .then(r => r.text())
+    .then(t => BJVE.script.run(t));
+</script>
 
 </body>
 </html>
